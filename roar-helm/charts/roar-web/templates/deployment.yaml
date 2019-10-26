@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "roar-web.name" . }}
+  labels:
+    app: {{ template "roar-web.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "roar-web.name" . }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+      {{- if .Values.image.pullPolicy }}
+        imagePullPolicy: {{ toYaml .Values.image.pullPolicy }}
+      {{- end }} 
+        ports:
+        - name: {{ .Values.deployment.ports.name }}
+          containerPort: {{ .Values.deployment.ports.containerPort }}
+       

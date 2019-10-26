@@ -1,0 +1,6 @@
+apiVersion: app.example.com/v1alpha1
+kind: RoarApp
+metadata:
+  name: example-roarapp
+spec:
+  replicas: 5

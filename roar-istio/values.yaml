@@ -1,0 +1,41 @@
+# Default values for roar-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+deployment:
+  metadata:
+    name: roar
+    labels:
+      name: roar
+  spec:
+    replicas: 1
+    template:
+      metadata:
+        labels:
+          name: roar
+      spec:
+        containers:
+          web:
+            name: roar-web
+            image: localhost:5000/roar-web
+            tag: v1
+            pullPolicy: Always
+          db:
+            name: roar-db
+            image: localhost:5000/roar-db
+            tag: v1
+            ports:
+              name: roar-db
+              containerPort: 3306
+            env:
+              MYSQL_DATABASE: "registry"
+              MYSQL_PASSWORD: "admin"
+              MYSQL_ROOT_PASSWORD: "root+1"
+              MYSQL_USER: "admin"
+            pullPolicy: Always
+service:
+  frontendPortName: "frontend"
+  internalPort: 8080
+  externalPort: 8089
+  type: NodePort
+  nodePort: 30100
+
