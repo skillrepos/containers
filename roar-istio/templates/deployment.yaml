@@ -57,7 +57,7 @@ spec:
     spec:
       containers:
       - name: {{ .Values.deployment.spec.template.spec.containers.web.name }}
-        image: "{{ .Values.deployment.spec.template.spec.containers.web.image }}:v2"
+        image: "{{ .Values.deployment.spec.template.spec.containers.web.image2 }}:v2"
         ports:
         - name: roar-web
           containerPort: 8080

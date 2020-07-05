@@ -17,6 +17,7 @@ deployment:
           web:
             name: roar-web
             image: localhost:5000/roar-web
+            image2: bclaster/roar-web
             tag: v1
             pullPolicy: Always
           db:
