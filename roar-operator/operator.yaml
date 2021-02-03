@@ -16,7 +16,7 @@ spec:
       containers:
         - name: roarapp-operator
           # Replace this with the built image name
-          image: bclaster/roarapp-operator:v2
+          image: quay.io/bclaster/roarapp-operator:v0.0.8
           command:
           - roarapp-operator
           imagePullPolicy: Always

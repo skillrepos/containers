@@ -17,8 +17,8 @@ deployment:
           web:
             name: roar-web
             image: localhost:5000/roar-web
-            image2: bclaster/roar-web
-            tag: v1
+            image2: quay.io/bclaster/roar-web
+            tag: 1.0.1
             pullPolicy: Always
           db:
             name: roar-db
