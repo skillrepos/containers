@@ -26,18 +26,18 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: roar-web
   labels:
-    name: roar-web
+    app: roar-web
+  name: roar-web
   namespace: roar
 spec:
-  type: NodePort
   ports:
-  - port: 8089
+  - name: frontend
+    port: 8089
     targetPort: 8080
-    nodePort: 31790
   selector:
-    name: roar-web
+    app: roar-web
+  type: NodePort
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -55,6 +55,7 @@ spec:
     metadata:
       labels:
         app: roar-db
+        name: mysql
     spec:
       containers:
       - env:
@@ -76,14 +77,17 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql
   labels:
-    name: mysql
+    app: roar-db
+  name: mysql
   namespace: roar
 spec:
   ports:
-  - name: "mysql"
+  - name: mysql
     port: 3306
+    targetPort: 3306
+  selector:
+    app: roar-db
     targetPort: 3306
   selector:
     name: mysql
