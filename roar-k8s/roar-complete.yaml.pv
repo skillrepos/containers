@@ -79,6 +79,12 @@ spec:
               configMapKeyRef:
                 name: mysql-configmap
                 key: mysql.user
+        image: localhost:5000/roar-db:v1
+        imagePullPolicy: Always
+        name: mysql
+        ports:
+        - containerPort: 3306
+          name: mysql
         volumeMounts:
         - mountPath: /var/lib/mysql
           name: mysql-pv-claim
@@ -86,12 +92,6 @@ spec:
       - name: mysql-pv-claim
         persistentVolumeClaim:
           claimName: mysql-pv-claim
-        image: localhost:5000/roar-db:v1
-        imagePullPolicy: Always
-        name: mysql
-        ports:
-        - containerPort: 3306
-          name: mysql
 ---
 apiVersion: v1
 kind: Service
