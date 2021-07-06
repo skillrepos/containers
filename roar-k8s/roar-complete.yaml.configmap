@@ -1,61 +1,64 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: roar-web
   labels:
-    name: roar-web
+    app: roar-web
+  name: roar-web
   namespace: roar
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: roar-web
   template:
     metadata:
       labels:
-        name: roar-web
+        app: roar-web
     spec:
       containers:
-      - name: roar-web
-        image: localhost:5000/roar-web:v1
+      - image: localhost:5000/roar-web:v1
+        imagePullPolicy: Always
+        name: roar-web
         ports:
-        - name: web
-          containerPort: 8080
+        - containerPort: 8080
+          name: web
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: roar-web
   labels:
-    name: roar-web
+    app: roar-web
+  name: roar-web
   namespace: roar
 spec:
-  type: NodePort
   ports:
-  - port: 8089
+  - name: frontend
+    port: 8089
     targetPort: 8080
-    nodePort: 31790
   selector:
-    name: roar-web
+    app: roar-web
+  type: NodePort
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql
   labels:
-    name: mysql
+    app: roar-db
+  name: mysql
   namespace: roar
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: roar-db
   template:
     metadata:
       labels:
+        app: roar-db
         name: mysql
     spec:
       containers:
-      - name: mysql
-        image: localhost:5000/roar-db:v1
-        ports:
-        - name: mysql
-          containerPort: 3306
-        env:
+      - env:
           - name: MYSQL_DATABASE
             valueFrom:
               configMapKeyRef:
@@ -76,18 +79,27 @@ spec:
               configMapKeyRef:
                 name: mysql-configmap
                 key: mysql.user
+        image: localhost:5000/roar-db:v1
+        imagePullPolicy: Always
+        name: mysql
+        ports:
+        - containerPort: 3306
+          name: mysql
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql
   labels:
-    name: mysql
+    app: roar-db
+  name: mysql
   namespace: roar
 spec:
   ports:
-  - name: "mysql"
+  - name: mysql
     port: 3306
+    targetPort: 3306
+  selector:
+    app: roar-db
     targetPort: 3306
   selector:
     name: mysql
