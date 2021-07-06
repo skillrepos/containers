@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 replicaCount: 1
 image:
-  repository: localhost:5000/roar-web
+  repository: bclaster/roar-web-image
   tag: v1
   pullPolicy: Always
 deployment:

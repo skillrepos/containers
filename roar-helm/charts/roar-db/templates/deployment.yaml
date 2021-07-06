@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "roar-db.name" . }}
@@ -9,21 +9,22 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "roar-db.name" . }}
   template:
-    metadata:
+    metadata: 
       labels:
         app: {{ template "roar-db.name" . }}
     spec:
       containers:
       - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-      {{- if .Values.image.pullPolicy }}
-        imagePullPolicy: {{ toYaml .Values.image.pullPolicy }}
-      {{- end }} 
+        image: bclaster/roar-db-image:v1
+        imagePullPolicy: Always
         ports:
         - name: {{ .Values.deployment.ports.name }}
           containerPort: {{ .Values.deployment.ports.containerPort }}
         env:
-          {{- include "roar-all.environment-values" . | indent 10 }}
+          {{- include "roar-db.environment-values" . | indent 10 }}
        
 
