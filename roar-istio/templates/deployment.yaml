@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.deployment.metadata.name }}-current
@@ -7,6 +7,9 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.deployment.spec.replicas }}
+  selector:
+    matchLabels:
+        app: {{ .Values.deployment.spec.template.metadata.labels.name }}
   template:
     metadata:
       labels:
@@ -38,7 +41,7 @@ spec:
         - containerPort: {{ .Values.deployment.spec.template.spec.containers.db.ports.containerPort }}
           name: {{ .Values.deployment.spec.template.spec.containers.db.ports.name }}
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.deployment.metadata.name }}-new
@@ -47,6 +50,9 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.deployment.spec.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.deployment.spec.template.metadata.labels.name }}
   template:
     metadata:
       labels:

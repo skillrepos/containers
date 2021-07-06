@@ -15,8 +15,9 @@ spec:
         exact: /roar/api/v1/status/version
     fault:
       delay:
-        percent: 25
-        fixedDelay: 3s
+        fixedDelay: 5s
+        percentage:
+          value: 50
     route:
     - destination:
         host: roar-web
