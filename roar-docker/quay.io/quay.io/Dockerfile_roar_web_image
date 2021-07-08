@@ -1,0 +1,7 @@
+FROM tomcat:7.0.65-jre7
+
+ARG warFile
+
+COPY $warFile $CATALINA_HOME/webapps/roar.war
+
+CMD ["catalina.sh", "run"]
