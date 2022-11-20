@@ -13,11 +13,6 @@ spec:
         exact: /roar/api/v1/status
     - uri:
         exact: /roar/api/v1/status/version
-    fault:
-      abort:
-        httpStatus: 500
-        percentage: 
-          value: 50
     route:
     - destination:
         host: roar-web
