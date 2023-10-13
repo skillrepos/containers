@@ -1,22 +1,226 @@
-# Kubernetes for Devs
-## An introduction to Kubernetes for Developers
+# Containers A-Z
+## An overview of Containers, Docker, Kubernetes, Istio, Helm, Kubernetes Operators and GitOps
 ## Session labs for codespace only
-## Revision 3.2 - 08/10/23
+## Revision 1.0 - 10/12/23
 
 **Startup IF NOT ALREADY DONE!**
 ```
 alias k=kubectl
-alias kz=kustomize
 minikube start
 ```
+*Signup for a Docker account and then sign in*
+```
+docker login
+```
+
 **NOTE: To copy and paste in the codespace, you may need to use keyboard commands - CTRL-C and CTRL-V.**
 
-**Lab 1- Exploring and Deploying into Kubernetes**
+**Lab 1 - Building Docker Images**
+
+**Purpose: In this lab, we’ll see how to build Docker images from Dockerfiles.**
+
+1. Switch into the directory for our docker work.
+
+```
+cd roar-docker
+```
+
+2. Do an *ls* command and take a look at the files that we have in this directory.
+
+```
+ls
+```
+
+3. Take a moment and look at each of the files that start with “Dockerfile”. See if
+you can understand what’s happening in them.
+
+```
+cat Dockerfile_roar_db_image
+cat Dockerfile_roar_web_image
+```
+
+4. Now let’s build our docker database image. Type (or copy/paste) the following
+command: (Note that there is a space followed by a dot at the end of the
+command that must be there.)
+
+```
+docker build -f Dockerfile_roar_db_image -t roar-db .
+```
+
+5. Next build the image for the web piece. This command is similar except it
+takes a build argument that is the war file in the directory that contains our
+previously built webapp.
+
+(Note the space and dot at the end again.)
+
+```
+docker build -f Dockerfile_roar_web_image --build-arg warFile=roar.war -t roar-web .
+```
+
+6. Now, let’s tag our two images for our local registry (running on localhost, port
+5000). We’ll give them a tag of “v1” as opposed to the default tag that Docker
+provides of “latest”.
+
+```
+docker tag roar-web localhost:5000/roar-web:v1
+docker tag roar-db localhost:5000/roar-db:v1
+```
+
+7. Do a docker images command to see the new images you’ve created.
+```
+docker images | grep
+```
+
+**Lab 2 - Composing images together**
+
+**Purpose: In this lab, we'll see how to make multiple containers execute together with docker compose and use the docker inspect command to get information to see our running app.**
+
+1. Take a look at the docker compose file for our application and see if you caan understand some of what it is doing. Click on the link: [**roar-k8s/roar-complete.yaml**](./roar-docker/docker-compose.yml) 
+
+2. Run the following command to compose the two images together that we built in lab 1.
+
+```
+docker-compose up
+```
+
+3. You should see the different processes running to create the containers and start the application running. Take a look at the running containers that resulted from this command.
+
+Note: We’ll leave the processes running in the first session, so open a second terminal emulator and enter the command below.
+
+```
+docker ps | grep roar
+```
+
+4. Make a note of the first 3 characters of the container id (first column) for the web container (row with roar-web in it). You’ll need those for the next step.
+
+5. Let’s find the web address so we can look at the running application. To do this, we will search for the information via a docker inspect command. Enter this command in the second terminal session, substituting in the characters from the container id from the step above for “<container id>” - the one for roar-web.
+(For example, if the line from docker ps showed this:
+237a48a2aeb8 roar-web "catalina.sh run"
+About a minute ago Up About a minute 0.0.0.0:8089-
+>8080/tcp
+then <container id> could be “237”. Also note that “IPAddress”
+is case-sensitive.)
+
+Make a note of the url that is returned.
+
+```
+docker inspect <container id> | grep IPAddress
+```
+
+6. Open a web browser by clicking on the mouse icon in the upper left and then selecting the Web Browser menu item.
+
+7. In the browser, go to the url below, substituting in the ip address from the step above for “<ip address>”. (Note the :8080 part added to the ip address)
+http://<ip address>:8080/roar/
+
+8. You should see the running app on a screen like the following:
+
+**Lab 3 – Debugging Docker Containers**
+
+**Purpose: While our app runs fine here, it’s helpful to know about a few commands that we can use to learn more about our containers if there are problems.**
+
+1. Let’s get a description of all of the attributes of our containers. For these commands, use the same 3 character container id you used in lab 2.
+Run the inspect command. Take a moment to scroll around the output.
+
+```
+docker inspect <container id>
+```
+
+2. Now, let’s look at the logs from the running container. Scroll around again and look at the output.
+
+```
+docker logs <container id>
+```
+
+3. While we’re at it, let’s look at the history of the image (not the container).
+
+```
+docker history roar-web
+```
+
+4. Now, let’s suppose we wanted to take a look at the actual database that is
+being used for the app. This is a mysql database but we don’t have mysql
+installed on the VM. So how can we do that? Let’s connect into the container
+and use the mysql version within the container. To do this we’ll use the “docker
+exec” command. First find the container id of the db container.
+
+```
+docker ps | grep roar-db
+```
+
+5. Make a note of the first 3 characters of the container id (first column) for the db
+container (row with **roar-db** in it). You’ll need those for the next step.
+
+6. Now, let’s exec inside the container so we can look at the actual database.
+
+```   
+docker exec -it <container id> bash
+```
+Note that the last item on the command is the command we want to have
+running when we get inside the container – in this case the bash shell.
+
+7. Now, you’ll be inside the db container. Check where you are with the pwd
+command and then let’s run the mysql command to connect to the database.
+(Type these at the /# prompt. Note no spaces between the options -u and -p
+and their arguments. You need only type the part in bold.)
+
+```
+root@container-id:/# pwd
+root@container-id:/# mysql -uadmin -padmin registry
+```
+
+(Here -u and -p are the userid and password respectively and registry is the
+database name.)
+
+8. You should now be at the “mysql>” prompt. Run a couple of commands to
+see what tables we have and what is in the database. (Just type the parts in
+bold.)
+
+```
+mysql> show tables;
+mysql> select * from agents;
+```
+
+9. Exit out of mysql and then out of the container.
+
+```
+mysql> exit
+root@container-id:/# exit
+```
+
+10. Let’s go ahead and push our images over to our local registry so they’ll be ready for Kubernetes to use.
+
+```
+docker push localhost:5000/roar-web:v1
+docker push localhost:5000/roar-db:v1
+```
+
+11. Since we no longer need our docker containers running or the original images around, let’s go ahead and get rid of them with the commands below.
+(Hint: docker ps | grep roar will let you find the ids more easily)
+Stop the containers
+
+```
+docker stop <container id for roar-web>
+docker stop <container id for roar-db>
+```
+
+Remove the containers
+
+```
+docker rm <container id for roar-web>
+docker rm <container id for roar-db>
+```
+
+Remove the images
+```
+docker rmi -f roar-web
+docker rmi -f roar-db**Lab 1- Exploring and Deploying into Kubernetes**
+```
+
+**Lab 4 - Exploring and Deploying into Kubernetes**
 
 **Purpose: In this lab, we’ll start to learn about Kubernetes and its object types,
 such as nodes and namespaces. We’ll also deploy a version of our app that has
-had Kubernetes yaml files created for it. And we'll see how to do some simple
-debugging when Kubernetes deployments don't go as planned.**
+had Kubernetes yaml files created for it. 
 
 1. Before we can deploy our application into Kubernetes, we need to have
 appropriate Kubernetes manifest yaml files for the different types of k8s objects
@@ -56,13 +260,13 @@ After you run these commands, you should see output like the following:
 * deployment.extensions/mysql created
 * service/mysql created
 
-4.  Now, let’s look at the pods currently running in our “roar” namespace.
+4.  Now, let’s look at the pods currently running in our “roar” namespace (and also see their labels).
 
 ```
-k get pods -n roar
+k get pods -n roar --show-labels
 ```
-Notice the STATUS field. What does the “ImagePullBackOff ” or
-“ErrImagePull” status mean?
+
+Notice the STATUS field. What does the “ImagePullBackOff ” or “ErrImagePull” status mean?
 
 5.  We need to investigate why this is happening. Let's do two things to make this
 easier. First, let's set the default namespace to be 'roar' instead of 'default' so we
