@@ -268,8 +268,7 @@ k get pods -n roar --show-labels
 
 Notice the STATUS field. What does the “ImagePullBackOff ” or “ErrImagePull” status mean?
 
-5.  We need to investigate why this is happening. Let's do two things to make this
-easier. First, let's set the default namespace to be 'roar' instead of 'default' so we
+5.  We need to investigate why this is happening. Let's set the default namespace to be 'roar' instead of 'default' so we
 don't have to pass *-n roar* all of the time.
 
 ```
@@ -285,7 +284,7 @@ have to supply the -n argument any longer.)
 k get pods --show-labels
 ```
 
-7. Let's run a command to look at the logs for the web pod.
+7. Let's run a command to look at the logs for the database pod.
 
 ```
 k logs -l app=roar-web
@@ -297,15 +296,12 @@ as the exact image name. We could use a describe command, but there's a
 shortcut using "get events" that we can do too.
 
 ```
-k get events | grep web | grep image
+k get events | grep db | grep image
 ```
 
-9. Notice that the output of the command from the step above gives us an image
-path and name: "quay.io/techupskills/roar-web:1.10.1".
+9. Remember that we tagged the images for our local registry as localhost:5000/roar-db:v1 and localhost:5000/roar-web:v1. But if you scroll back up and look at the “Image” property in the describe output, you’ll see that it actually specifies “localhost:5000/roar-db-v1”.
 
-10. The problem is that we don't have an image with the tag "1.10.1". There's a typo - instead we have a "1.0.1" version.
-
-11. We can change the existing deployment to see if this fixes things. But first, let's
+10. We can change the existing deployment to see if this fixes things. But first, let's
 setup a watch in a separate terminal so we can see how Kubernetes changes
 things when we make a change to the configuration. 
 
@@ -313,31 +309,31 @@ In the codespace, right-click and select the `Split Terminal` option. This will 
 
 ![Splitting the terminal](./images/k8sdev4a.png?raw=true "Splitting the terminal")
 
-12.  In the right terminal, run a command to start a `watch` of pods in the roar namespace. The watch will continue running until we stop it.  ( Note you will need to add *alias k=kubectl* if you want it there. )
+11.  In the right terminal, run a command to start a `watch` of pods in the roar namespace. The watch will continue running until we stop it.  ( Note you will need to add *alias k=kubectl* if you want it there. )
 
 ```
 kubectl get -n roar pods -w
 ```
 
-13. Back in the left terminal, we will edit the deployment. Set your editor to our built-in one first.
+12. Back in the left terminal, we will edit the deployment. Set your editor to our built-in one first.
 
 ```
 export EDITOR='code --wait'
 ```
 
-14. Edit the existing object.
+13. Edit the existing object.
 
 ```
 k edit deploy/roar-web
 ```
 
-15. Change line 39 to use 1.0.1 instead of 1.10.1 in the file.  
+14. Change lines 19 and 70 to use **.v1** instead of **-v1** in the file.  
 Save your changes and close the editor by clicking on the X in the tab at the 
 top to save and close the file. 
 
 ![Editing the file](./images/k8sdev5.png?raw=true "Editing the file")
 
-16. Look back to the terminal session where you have the watch running. Eventually, you should
+15. Look back to the terminal session where you have the watch running. Eventually, you should
 see a new pod finished creating and start running. The previous web pod will
 be terminated and removed. You can stop the watch command in that terminal via Ctrl-C. 
 
@@ -345,106 +341,7 @@ be terminated and removed. You can stop the watch command in that terminal via C
 **[END OF LAB]**
 </p>
 
-**Lab 2 - Working with services and ports**
-
-**Purpose: In this lab, we'll explore some of the simple ways we can work with services and ports**
-
-1. Our app should now be running per the changes made in lab 1. Let's take a look at the services that we have.
-
-```
-k get svc
-```
-
-2. The service for the webapp (roar-web) is the one we would access in the browser to see the application. But notice that it is of type ClusterIP. This type of service is intended for access within the cluster, meaning we can't access it directly. To access it, we need to forward the port to a port on the host machine. Find the port that the svc is using internally by looking under "PORT(S)" column in the output from step 1. Should be "8089".
-
-
-3. We can forward this port to the host system with a "kubectl" command. In the second/right different terminal session, run the command below to forward the port from the service to a port on the host system. The " :" syntax will let Kubernetes find an unused port. Alternatively, we could supply a specific port to forward to.
-
-```
-k port-forward svc/roar-web :8089 &
-```
-
-4.  You should see a pop-up in your codespace that informs that `(i) Your application running on port <some number> is available.` and gives you a button to click on to `Open in browser`.  Click on that button. (If you don't see the pop-up, you can also switch to the `PORTS` tab at the top of the terminal, select the row with `8089`, and right-click and select `Open in browser`.)
-
-![Port pop-up](./images/advk8s6.png?raw=true "Port pop-up")
-
-5.  What you should see in the browser is an application called **Apache Tomcat** running. Click at the end of the URL in the address bar and add the text `/roar/`.  Make sure to include the trailing slash.  Then hit enter and you should see the *roar* application running in the browser.
-
-The complete URL should look something like
-```console
-https://gwstudent-cautious-space-goldfish-p7vpg5q55xx36944-8089.preview.app.github.dev/roar/
-```
-
-6. You should see a page like below. Notice that while we have the web app showing, there is no data being displayed. This suggests that there is something wrong with being able to get data from the database.
-
-![Running app in K8s](./images/k8sdev6.png?raw=true "Running app in K8s")
-
-
-7. Go back to your original codespace terminal. Let's take a quick look at the logs for the current mysql pod to see if there's any issues showing there. 
-
-```
-k logs -l app=roar-db
-```
-
-8. Things should look ok in the logs. Let's use exec to run a query from the database. You'll need the pod name of the mysql pod name (which you can get from 'k get pods' and then copy just the NAME part for the mysql pod). Note in the second command, that "-- mysql" not "--mysql".
-
-```
-k get pods | grep mysql (to get the db pod's name)
-
-k exec -it <mysql-pod-name> -- mysql -uadmin -padmin -e 'select * from registry.agents'
-```
-
-9. This should return a set of data. Since that works, let's move on to check the
-endpoints - to see if there are pods actually connected to the service. You
-can use the get endpoints command to do this.
-
-```
-k get ep
-```
-
-10. This shows no endpoints for the mysql service. Endpoints are connected
-through matching labels. Let's see what labels the service is looking for.
-
-```
-k get svc/mysql -o yaml | grep -A1 selector
-```
-
-11. From this we can see that the service is looking to select pods to talk to that
-have a label of "name: roar-db". So let's see what labels the pod for the
-database has.
-
-```
-k get pods --show-labels | grep mysql
-```
-
-12. From the output here, we can see that the pod does not have the label
-"name: roar-db" that the service is trying to use to select a pod to connect to.
-There are a couple of different ways to fix this, but the most simple may be
-just to update the label to be the one that is expected via the command
-below. Note that the first -l is a selector via an existing label that we then
-overwrite.
-
-```
-k label pod -l name=mysql --overwrite name=roar-db
-```
-
-13. After the command above is run, you should be able to get the list of
-endpoints again and see that there is a pod now matched to the mysql
-service. 
-
-```
-k get ep
-```
-
-14. Then you can refresh your browser session and you should see data in the app as below. After refresh…
-
-![Running app in K8s](./images/advk8s5.png?raw=true "Running app in K8s")
-
-<p align="center">
-**[END OF LAB]**
-</p>
-
-**Lab 3 - Working with Kubernetes secrets and configmaps**
+**Lab 5 - Working with Kubernetes secrets and configmaps**
 
 **Purpose:  In this lab we’ll get some practice storing secure and insecure information in a way that is accessible to k8s but not stored in the usual deployment files.**
 
@@ -561,7 +458,7 @@ k apply -f roar-complete.yaml
 **[END OF LAB]**
 </p>
 
-**Lab 4 – Working with persistent storage – Kubernetes Persistent Volumes and Persistent Volume Claims**
+**Lab 6 – Working with persistent storage – Kubernetes Persistent Volumes and Persistent Volume Claims**
 **Purpose: In this lab, we’ll see how to connect pods with external storage resources via persistent volumes and persistent volume claims.**
 
 1.	While we can modify the containers in pods running in the Kubernetes namespaces, we need to be able to persist data outside of them.  This is because we don’t want the data to go away when something happens to the pod.   Let’s take a quick look at how volatile data is when just stored in the pod.  **If you don't already have a browser session open** with the instance of our sample app that you’re running in the “roar” namespace, open it again. You can do this by clicking on the Ports tab in your codespace lower section, selecting the line with the "kubectl port-forward" command, right-clicking and then opening in a broswer (see figure below). **After this, you will need to remember to add the "/roar" at the end of the URL.**
@@ -655,7 +552,7 @@ k delete ns roar
 **[END OF LAB]**
 </p>
 
-**Lab 5 – Working with Helm**
+**Lab 7 – Working with Helm**
 **Purpose:  In this lab, we’ll compare a Helm chart against standard Kubernetes manifests and then deploy the Helm chart into Kubernetes**
 
 1.	For this lab, reset the default namespace.
@@ -908,223 +805,7 @@ k delete ns roar-helm
 **[END OF LAB]**
 </p>
 
-**Lab 7 - Run a basic Kustomize example**
-
-**Purpose:  In this lab, we’ll see how to make a set of manifests usable with Kustomize and how to use Kustomize to add additional changes without modifying the original files.**
-
-(For these labs, we have  "alias kz=kustomize". You may also use “kubectl kustomize” in place of “kz build” and “kubectl apply -k” in place of running Kustomize and kubectl via a pipe to apply.) 
-
-1.	Change to the base  subdirectory. In this directory, we have deployment and service manifests for a simple webapp that uses a MySQL database and a file to create a namespace.  You can see the files by running the *tree* command.
-
-```
-cd /workspaces/k8s-dev-v2/kz/base
-
-tree
-
-```
-
-2.	 Let's see what happens when we try to run "kustomize build" against these files. (Here I have "kustomize" aliased as "kz".)  There will be an error.
-
-```
-kz build (or kubectl kustomize)
-```
-
-3.	Notice the error message about there not being a kustomization file.  Let's add one.  There's a basic one in the "extra" directory named "kustomization.yaml".  Copy it over into the directory.  Take a look at the contents to see what it does and then run the build command again, passing it to kubectl apply. 
-```
-cp ../extra/kustomization.yaml kustomization.yaml
-
-```
-
-Open the file [**kz/base/kustomization.yaml**](./kz/base/kustomization.yaml) 
-
-```
-kz build | k apply -f -  (or kubectl apply -k .)
-```
-
-4.	So  which namespace did this get deployed to?  It went to the "default" one which you can see by looking at what's in there.  
-
-```
-k get all
-```
-
-5.	We have a namespace.yaml file in the directory.  Take a look at it. It is setup to create a namespace.  So how do we use it with Kustomize?  Since it's another resource, we just need to include it in our list of resources.  And then we also need to specify the namespace it creates ("roar-kz") in the kustomization file.  
-
-Edit the kustomization.yaml file and add the namespace line at the top (line 2) and add namespace.yaml at the end of the list of resources (line 11).  Save your changes and exit the editor when done.  
-
-a. Open the file [**kz/base/namespace.yaml**](./kz/base/namespace.yaml) to review it.
-
-b. Open the file [**kz/base/kustomization.yaml**](./kz/base/kustomization.yaml) to edit it.
-
-c. Add the lines indicated in the kustomization.yaml file (see screenshot below).
-
-![adding namespace](./images/k8sdev16.png?raw=true "Adding namespace")
-
- 
-6.	Now that we've added the namespace resource, let's try the kustomize build command again to see if our namespace "roar-original" shows up where expected.  You should see the manifest to create the namespace now included at the top of the output and the various resources having the namespace added.
-
-```
-kz build | grep -n3 roar-kz
-```
-
-7.	Now we can go ahead and apply this again.  Afterwards you can verify that the new namespace got created and that our application is running there.
-
-```
-kz build | k apply -f -
-k get ns
-k get all -n roar-kz
-```
-
-8.	Let's make one more change here.  Let's apply a common annotation to our manifests.  Edit the kustomization file again and add the top 2 lines as shown in the screenshot.  When you are done, save your changes and exit the editor. [**kz/base/kustomization.yaml**](./kz/base/kustomization.yaml) 
-
-a. Select the tab with [**kz/base/kustomization.yaml**](./kz/base/kustomization.yaml)
-
-b. Add these 2 lines at the top:
- ```
-		commonAnnotations:
-           version: base   
-```                          
- ![adding common annotation](./images/k8sdev17.png?raw=true "Adding common annotation")
-
-9.	Now you can run kustomize build and see the annotations. Afterwards you can go ahead and apply the changes.  Look for the added annotation to all the resources.
-
-```     
-kz build | grep -a5 metadata
-
-kz build | k apply -f -
-```
-
-10.	The instance of our application should be running in the roar-kz namespace.  If you want to look at it, you can do a port forward as before and open it to look at it.
-
-11.	To save on system resources, delete the *roar-kz* namespace.
-
-```
-k delete ns roar-kz
-```
-
-<p align="center">
-**[END OF LAB]**
-</p>
-
-**Lab 8 -  Creating Variants**
-
-**Purpose:  In this lab, we’ll see how to create production and stage variants of our simple application.**
-
-1.	To illustrate how variants work, we'll first create a directory for the overlays that will create our staging and production variants.  Change back to the kz directory and create the two directories.
-
-```
-cd /workspaces/k8s-dev-v2/kz
-
-mkdir -p overlays/staging overlays/production
-```
-
-2.	To pick up the necessary files to build the variants we'll need kustomization.yaml files in the directories pointing back to the appropriate resources.  For simplicity, we'll just seed the directories with a kustomization.yaml file that points back to our standard bases. Execute the copy commands below to do this.  After this, your directory tree should look as shown at the end of this step.
-
-```
-cp extra/kustomization.yaml.variant overlays/staging/kustomization.yaml
-cp extra/kustomization.yaml.variant overlays/production/kustomization.yaml
-tree overlays 
-
-overlays
-├── production
-│   └── kustomization.yaml
-└── staging
-    └── kustomization.yaml
-```
-
-3.	We now have an overlay file that we can use with Kustomize.  Take a look at what's in it and then let's make sure we can build with it.
- 
-Open [**kz/overlays/staging/kustomization.yaml**](./kz/overlays/staging/kustomization.yaml)
-
-```
-
-kz build overlays/staging
-
-```
-
-4.	What namespace will this deploy to if we apply it as is?  Look back up through the output from the previous step.  Notice that if we applied it as is, it would go to the roar-kz namespace. Let's use separate namespaces for the staging overlay and the production overlay.  To do that we'll just add the namespace transformer to the two new kustomization.yaml files. You can either edit the files and add the respective lines or just use the shortcut below.
-
-```
-echo namespace: roar-staging >> overlays/staging/kustomization.yaml
-echo namespace: roar-production >> overlays/production/kustomization.yaml
-```
-
-5.	Now you can do a kustomize build on each to verify it has the desired namespace in the output.  
-
-```
-
-kz build overlays/staging | grep namespace
-
-kz build overlays/production | grep namespace
-
-```
-
-
-6.	Let's go ahead and apply these to get the variants of our application running.  Since we didn't include a different namespace file to create the namespaces, we'll need to create those first. Then we can build and apply the variants. If you want afterwards, you can do the same thing we did at the end of lab 1 to find the nodeports and see the variants running.  (You can ignore the warnings.)
-
-```
-
-k create ns roar-staging
-k create ns roar-production
-
-kz build overlays/staging | k apply -f -
-kz build overlays/production | k apply -f -
-
-```
-
-7.	Let's suppose that we want to make some more substantial changes in our variants.  For example, we want to use test data in the version of our app running in the roar-staging namespace. The test data is contained in a different image at  quay.io/bclaster/roar-db-test:v4.  To make the change we'll use another transformer called "images". To use this, edit the kustomization.yaml file in the overlays/staging area and add the lines shown at the end of the file in the screenshot below (starting at line 10). 
-
-(There is also a "kustomization.yaml.test-image" file in the "extra" directory if you need a reference.)
-
-a. Open [**kz/overlays/staging/kustomization.yaml**](./kz/overlays/staging/kustomization.yaml)
-
-b. Add these lines:
-
-```
-
-images:
-- name: quay.io/techupskills/roar-db:v2
-  newName: quay.io/bclaster/roar-db-test
-  newTag: v4
-
-``` 
- ![adding image transformer](./images/k8sdev18.png?raw=true "Adding image transformer")
-
-8.	Now apply the variant.  
-
-```
-
-kz build overlays/staging | k apply -f -
-
-```
-
-9.	You can now forward the port for the service from roar-staging.
-
-```
-
-k port-forward -n roar-staging svc/roar-web :8089
-
-```
-
-10.	Refresh and see the test version of the data. (Don't forget to add "/roar" at the end.)
-
- ![test data in app](./images/k8sdev19.png?raw=true "Test data in app")
-
-
-11.	To save on system resources, delete the *roar-staging* and *roar-production* namespaces.
-
-```
-
-k delete ns roar-staging
-
-k delete ns roar-production
-
-```
-
-<p align="center">
-**[END OF LAB]**
-</p>
-
-**Lab  9 - Monitoring**
+**Lab 8 - Monitoring**
 
 **Purpose:  This lab will introduce you to a few of the ways we can monitor what is happening in our Kubernetes cluster and objects.**
 
