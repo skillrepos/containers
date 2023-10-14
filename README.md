@@ -10,6 +10,7 @@ These steps **must** be completed prior to starting the actual labs.
 - You do this by clicking the `Fork` button in the upper right portion of the main project page and following the steps to create a copy in **your-github-userid/caz-class-v2** .
 
 ![Forking repository](./images/cazclass1.png?raw=true "Forking the repository")
+![Forking repository](./images/cazclass3.png?raw=true "Forking the repository")
 
 ## Configure your codespace
 
@@ -20,7 +21,7 @@ These steps **must** be completed prior to starting the actual labs.
     - Click `Create codespaces on main` to create the codespace.
     - After the codespace has initialized there will be a terminal present.
 
-![Starting codespace](./images/casclass2.png?raw=true "Starting your codespace")
+![Starting codespace](./images/cazclass2.png?raw=true "Starting your codespace")
 
 
 ## Start your single-node Kubernetes cluster
