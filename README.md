@@ -35,18 +35,25 @@ These steps **must** be completed prior to starting the actual labs.
 
     - The output should look similar to the following.
 
-```console
-😄  minikube v1.30.1 on Ubuntu 20.04 (docker/amd64)
-✨  Using the docker driver based on existing profile
+😄  minikube v1.31.2 on Ubuntu 20.04 (docker/amd64)
+✨  Automatically selected the docker driver. Other choices: none, ssh
+📌  Using Docker driver with root privileges
 👍  Starting control plane node minikube in cluster minikube
 🚜  Pulling base image ...
-🏃  Updating the running docker "minikube" container ...
-🐳  Preparing Kubernetes v1.26.3 on Docker 23.0.2 ...
-🔎  Verifying Kubernetes components...
+💾  Downloading Kubernetes v1.27.4 preload ...
+    > preloaded-images-k8s-v18-v1...:  393.21 MiB / 393.21 MiB  100.00% 206.91 
+    > gcr.io/k8s-minikube/kicbase...:  447.62 MiB / 447.62 MiB  100.00% 56.57 M
+🔥  Creating docker container (CPUs=2, Memory=2200MB) ...
+🐳  Preparing Kubernetes v1.27.4 on Docker 24.0.4 ...
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔗  Configuring bridge CNI (Container Networking Interface) ...
     ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
-🌟  Enabled addons: storage-provisioner, default-storageclass
+🔎  Verifying Kubernetes components...
+🌟  Enabled addons: default-storageclass, storage-provisioner
 🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
-```
+
 
 ## Set aliases
 3. Set up a couple of simple aliases for tooling
@@ -60,7 +67,7 @@ alias kz=kustomize
 
 After the codespace has started, open the labs document by going to the file tree on the left, find the file named **codespace-labs.md**, right-click on it, and open it with the **Preview** option.)
 
-![Labs doc preview in codespace](./images/cazclass3.png?raw=true "Labs doc preview in codespace")
+![Labs doc preview in codespace](./images/cazclass4.png?raw=true "Labs doc preview in codespace")
 
 This will open it up in a tab above your terminal. Then you can follow along with the steps in the labs. 
 Any command in the gray boxes is either code intended to be run in the console or code to be updated in a file.
