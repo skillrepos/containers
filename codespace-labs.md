@@ -177,14 +177,20 @@ mysql> exit
 root@container-id:/# exit
 ```
 
-10. Let’s go ahead and push our images over to our local registry so they’ll be ready for Kubernetes to use.
+10. Start a local docker registry so we can store our images.
+
+```
+docker compose -f extra/registry-compose.yml up
+```
+
+11. Let’s go ahead and push our images over to our local registry so they’ll be ready for Kubernetes to use.
 
 ```
 docker push localhost:5000/roar-web:v1
 docker push localhost:5000/roar-db:v1
 ```
 
-11. Since we no longer need our docker containers running or the original images around, let’s go ahead and get rid of them with the commands below.
+12. Since we no longer need our docker containers running, let’s go ahead and get rid of them with the commands below.
 (Hint: docker ps | grep roar will let you find the ids more easily)
 Stop the containers
 
@@ -200,11 +206,6 @@ docker rm <container id for roar-web>
 docker rm <container id for roar-db>
 ```
 
-Remove the images
-```
-docker rmi -f roar-web
-docker rmi -f roar-db**Lab 1- Exploring and Deploying into Kubernetes**
-```
 
 **Lab 4 - Exploring and Deploying into Kubernetes**
 
