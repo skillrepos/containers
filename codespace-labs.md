@@ -25,21 +25,11 @@ docker login
 cd roar-docker
 ```
 
-2. Do an *ls* command and take a look at the files that we have in this directory.
+2. Take a look at the "Dockerfiles" that we have in this directory and see if you can understand what's happening in them. 
+   a. Click on the link or, in the file explorer to the left, select the file [**roar-docker/Dockerfile_roar_db_image**](./roar-docker/Dockerfile_roar_db_image)
+   b. Click on the link or, in the file explorer to the left, select the file [**roar-docker/Dockerfile_roar_web_image**](./roar-docker/Dockerfile_roar_web_image) 
 
-```
-ls
-```
-
-3. Take a moment and look at each of the files that start with “Dockerfile”. See if
-you can understand what’s happening in them.
-
-```
-cat Dockerfile_roar_db_image
-cat Dockerfile_roar_web_image
-```
-
-4. Now let’s build our docker database image. Type (or copy/paste) the following
+3. Now let’s build our docker database image. Type (or copy/paste) the following
 command: (Note that there is a space followed by a dot at the end of the
 command that must be there.)
 
@@ -68,7 +58,7 @@ docker tag roar-db localhost:5000/roar-db:v1
 
 7. Do a docker images command to see the new images you’ve created.
 ```
-docker images | grep
+docker images | grep roar
 ```
 
 **Lab 2 - Composing images together**
