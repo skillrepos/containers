@@ -305,24 +305,25 @@ In the codespace, right-click and select the `Split Terminal` option. This will 
 kubectl get -n roar pods -w
 ```
 
-12. Back in the left terminal, we will edit the deployment. Set your editor to our built-in one first.
+12. Edit the existing object.
 
 ```
-export EDITOR='code --wait'
+code roar-complete.yaml
 ```
 
-13. Edit the existing object.
-
-```
-k edit deploy/roar-web
-```
-
-14. Change lines 19 and 70 to use **.v1** instead of **-v1** in the file.  
+13. Change lines 19 and 70 to use **.v1** instead of **-v1** in the file.  
 Save your changes and close the editor by clicking on the X in the tab at the 
 top to save and close the file. 
 
-![Editing the file](./images/k8sdev5.png?raw=true "Editing the file")
+![Editing the file](./images/cazclass6.png?raw=true "Editing the file")
+![Editing the file](./images/cazclass7.png?raw=true "Editing the file")
 
+14. In the main terminal window, apply the updated manifest.
+
+```
+k apply -f roar-complete.yaml
+```
+    
 15. Look back to the terminal session where you have the watch running. Eventually, you should
 see a new pod finished creating and start running. The previous web pod will
 be terminated and removed. You can stop the watch command in that terminal via Ctrl-C. 
