@@ -7,6 +7,7 @@
 ```
 alias k=kubectl
 minikube start
+minikube addons enable registry
 ```
 *Signup for a Docker account and then sign in*
 ```
