@@ -6,7 +6,7 @@ These steps **must** be completed prior to starting the actual labs.
 
 ## Create your own repository for these labs
 
-- Ensure that you have created a repository by forking the [skillrepos/k8s-dev-v2](https://github.com/skillrepos/cas-class-v2) project as a template into your own GitHub area.
+- Ensure that you have created a repository by forking the [skillrepos/caz-class-v2](https://github.com/skillrepos/cas-class-v2) project as a template into your own GitHub area.
 - You do this by clicking the `Fork` button in the upper right portion of the main project page and following the steps to create a copy in **your-github-userid/caz-class-v2** .
 
 ![Forking repository](./images/cazclass1.png?raw=true "Forking the repository")
