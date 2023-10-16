@@ -65,12 +65,12 @@ docker images | grep roar
 
 **Purpose: In this lab, we'll see how to make multiple containers execute together with docker compose and use the docker inspect command to get information to see our running app.**
 
-1. Take a look at the docker compose file for our application and see if you caan understand some of what it is doing. Click on the link: [**roar-k8s/roar-complete.yaml**](./roar-docker/docker-compose.yml) 
+1. Take a look at the docker compose file for our application and see if you can understand some of what it is doing. Click on the link: [**roar-docker/docker-compose.yml**](./roar-docker/docker-compose.yml) 
 
 2. Run the following command to compose the two images together that we built in lab 1.
 
 ```
-docker-compose up
+docker compose up
 ```
 
 3. You should see the different processes running to create the containers and start the application running. Take a look at the running containers that resulted from this command.
