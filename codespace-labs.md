@@ -292,7 +292,7 @@ as the exact image name. We could use a describe command, but there's a
 shortcut using "get events" that we can do too.
 
 ```
-k get events | grep db | grep image
+k get events | grep web | grep image
 ```
 
 9. Remember that we tagged the images for our local registry as localhost:5000/roar-db:v1 and localhost:5000/roar-web:v1. But if you scroll back up and look at the “Image” property in the describe output, you’ll see that it actually specifies “localhost:5000/roar-db-v1”.
@@ -300,10 +300,6 @@ k get events | grep db | grep image
 10. We can change the existing deployment to see if this fixes things. But first, let's
 setup a watch in a separate terminal so we can see how Kubernetes changes
 things when we make a change to the configuration. 
-
-In the codespace, right-click and select the `Split Terminal` option. This will add a second terminal side-by-side with your other one.
-
-![Splitting the terminal](./images/k8sdev4a.png?raw=true "Splitting the terminal")
 
 11.  In the right terminal, run a command to start a `watch` of pods in the roar namespace. The watch will continue running until we stop it.  ( Note you will need to add *alias k=kubectl* if you want it there. )
 
@@ -320,13 +316,15 @@ top to save and close the file.
 ![Editing the file](./images/cazclass6.png?raw=true "Editing the file")
 ![Editing the file](./images/cazclass7.png?raw=true "Editing the file")
 
-14. In the main terminal window, apply the updated manifest.
+14. In the other terminal window, apply the updated manifest.
 
 ```
+cd ../roar-k8s (if needed)
 k apply -f roar-complete.yaml
 ```
+![Updating the pods](./images/cazclass8.png?raw=true "Updating the pods")
     
-15. Look back to the terminal session where you have the watch running. Eventually, you should
+15. Look back to the terminal session where you have the watch running. Eventually, (it may take a few minutes) you should
 see a new pod finished creating and start running. The previous web pod will
 be terminated and removed. You can stop the watch command in that terminal via Ctrl-C. 
 
