@@ -83,23 +83,28 @@ docker compose up
 docker ps | grep roar
 ```
 
-4. Make a note of the first 3 characters of the container id (first column) for the web container (row with roar-web in it). You’ll need those for the next lab.
+5. Make a note of the first 3 characters of the container id (first column) for the web container (row with roar-web in it). You’ll need those for the next lab.
 
-5. Let’s see our application running from the containers and the compose. In the top "tab" line of the terminal, click on the *PORTS* tab. Per the docker-compose.yml file, our web app is running on port 8089. Find the row (probably the 2nd) with "8089" in the *Port* column. Under the second column *Forwarded Address*, click on the icon that looks like the splitter pane and, when you hover over it, says **Preview in Editor**. (See screenshot below.)
+6. Let’s see our application running from the containers and the compose. In the top "tab" line of the terminal, click on the *PORTS* tab. Per the docker-compose.yml file, our web app is running on port 8089. Find the row (probably the 2nd) with "8089" in the *Port* column. Under the second column *Forwarded Address*, click on the icon that looks like the splitter pane and, when you hover over it, says **Preview in Editor**. (See screenshot below.)
    
 ![Opening preview of app in editor](./images/lab2s5.png?raw=true "Opening preview app in editor")
 
-6. After this, you should get a simple browser that opens up as a pane in the editor.
+
+7. After this, you should get a simple browser that opens up as a pane in the editor.
 
 ![Preview of server in editor](./images/lab2s6.png?raw=true "Preview of server in editor")
 
-7. To see our app, we need to add **/roar/** to the end of the URL in that simple browser window. Do that now - you must have the trailing slash!
+
+8. To see our app, we need to add **/roar/** to the end of the URL in that simple browser window. Do that now - you must have the trailing slash!
 
 ![App in editor](./images/lab2s7.png?raw=true "App in editor")   
 
-8. You should see the running app in the window, though you may need to scroll around  or expand the window to see all of it.
+
+9. You should see the running app in the window, though you may need to scroll around  or expand the window to see all of it.
 
 ![Full app](./images/lab2s8.png?raw=true "Full app")   
+
+
 
 
 **Lab 3 – Debugging Docker Containers**
@@ -175,10 +180,10 @@ mysql> exit
 root@container-id:/# exit
 ```
 
-10. Start a local docker registry so we can store our images.
+10. In order to use our registry, we need to run a Kubernetes command to get access. Run the command below. Just dismiss/close any dialogs that come up afterwards.
 
 ```
-docker compose -f extra/registry-compose.yml up
+kubectl port-forward --namespace kube-system service/registry 5000:80 &
 ```
 
 11. Let’s go ahead and push our images over to our local registry so they’ll be ready for Kubernetes to use.
@@ -189,7 +194,7 @@ docker push localhost:5000/roar-db:v1
 ```
 
 12. Since we no longer need our docker containers running, let’s go ahead and get rid of them with the commands below.
-(Hint: docker ps | grep roar will let you find the ids more easily)
+(Hint: *docker ps | grep roar* will let you find the ids more easily)
 Stop the containers
 
 ```
