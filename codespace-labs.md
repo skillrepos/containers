@@ -29,7 +29,7 @@ cd roar-docker
    b. Click on the link or, in the file explorer to the left, select the file [**roar-docker/Dockerfile_roar_web_image**](./roar-docker/Dockerfile_roar_web_image) 
 
 
-4. Now let’s build our docker database image. Type (or copy/paste) the following
+3. Now let’s build our docker database image. Type (or copy/paste) the following
 command: (Note that there is a space followed by a dot at the end of the
 command that must be there.)
 
@@ -37,7 +37,7 @@ command that must be there.)
 docker build -f Dockerfile_roar_db_image -t roar-db .
 ```
 
-5. Next build the image for the web piece. This command is similar except it
+4. Next build the image for the web piece. This command is similar except it
 takes a build argument that is the war file in the directory that contains our
 previously built webapp.
 
@@ -47,7 +47,7 @@ previously built webapp.
 docker build -f Dockerfile_roar_web_image --build-arg warFile=roar.war -t roar-web .
 ```
 
-6. Now, let’s tag our two images for our local registry (running on localhost, port
+5. Now, let’s tag our two images for our local registry (running on localhost, port
 5000). We’ll give them a tag of “v1” as opposed to the default tag that Docker
 provides of “latest”.
 
@@ -56,7 +56,7 @@ docker tag roar-web localhost:5000/roar-web:v1
 docker tag roar-db localhost:5000/roar-db:v1
 ```
 
-7. Do a docker images command to see the new images you’ve created.
+6. Do a docker images command to see the new images you’ve created.
 ```
 docker images | grep roar
 ```
