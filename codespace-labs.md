@@ -73,9 +73,11 @@ docker images | grep roar
 docker compose up
 ```
 
-3. You should see the different processes running to create the containers and start the application running. Take a look at the running containers that resulted from this command.
+3. You should see the different processes running to create the containers and start the application running. In order to do the following steps, we'll need to open a second terminal. We can do that by splitting this one. Either right-click and select *Split Terminal* or click on the two-panel icon near the trash can. See screenshot.
 
-Note: We’ll leave the processes running in the first session, so open a second terminal emulator and enter the command below.
+![Adding a second split terminal](./images/lab2s3.png?raw=true "Splitting the terminal")
+
+4. Click in the second terminal and take a look at the running containers that resulted from the docker compose command by running the command below.
 
 ```
 docker ps | grep roar
