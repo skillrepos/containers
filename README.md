@@ -25,6 +25,7 @@ These steps **must** be completed prior to starting the actual labs.
 
 
 ## Start your single-node Kubernetes cluster
+
 2. There is a simple one-node Kubernetes instance called **minikube** available in your codespace. Start it the following way:
 
     - Run the following commands in the codespace's terminal (**This will take several minutes to run...**):
@@ -54,18 +55,37 @@ These steps **must** be completed prior to starting the actual labs.
 🌟  Enabled addons: default-storageclass, storage-provisioner
 🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
 
+## Enable a local insecure registry to store images in
 
+3. Enable an addon for minikube to provide a local registry to temporarily store images
+
+    - Run the following command in the codespace's terminal:
+
+      ```bash
+      minikube addons enable registry
+      ```
+
+    - The output should look similar to the following:
+
+  ```console
+   💡  registry is an addon maintained by Google. For any concerns contact minikube on GitHub.
+   You can view the list of minikube maintainers at: https://github.com/kubernetes/minikube/blob/master/OWNERS
+    ▪ Using image gcr.io/google_containers/kube-registry-proxy:0.4
+    ▪ Using image docker.io/registry:2.8.1
+   🔎  Verifying registry addon...
+   🌟  The 'registry' addon is enabled
+  ```
 ## Set aliases
-3. Set up a couple of simple aliases for tooling
+
+4. Set up a simple alias for tooling
 
 ```
 alias k=kubectl
-alias kz=kustomize
 ```
 
 ## Labs
 
-After the codespace has started, open the labs document by going to the file tree on the left, find the file named **codespace-labs.md**, right-click on it, and open it with the **Preview** option.)
+5. After the codespace has started, open the labs document by going to the file tree on the left, find the file named **codespace-labs.md**, right-click on it, and open it with the **Preview** option.)
 
 ![Labs doc preview in codespace](./images/cazclass4.png?raw=true "Labs doc preview in codespace")
 
