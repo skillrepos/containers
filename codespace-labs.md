@@ -1,7 +1,7 @@
 # Containers A-Z
 ## An overview of Containers, Docker, Kubernetes, Istio, Helm, Kubernetes Operators and GitOps
 ## Session labs for codespace only
-## Revision 1.0 - 10/12/23
+## Revision 1.1 - 10/15/23
 
 **Startup IF NOT ALREADY DONE!**
 ```
@@ -83,28 +83,24 @@ docker compose up
 docker ps | grep roar
 ```
 
-4. Make a note of the first 3 characters of the container id (first column) for the web container (row with roar-web in it). You’ll need those for the next step.
+4. Make a note of the first 3 characters of the container id (first column) for the web container (row with roar-web in it). You’ll need those for the next lab.
 
-5. Let’s find the web address so we can look at the running application. To do this, we will search for the information via a docker inspect command. Enter this command in the second terminal session, substituting in the characters from the container id from the step above for “<container id>” - the one for roar-web.
-(For example, if the line from docker ps showed this:
-237a48a2aeb8 roar-web "catalina.sh run"
-About a minute ago Up About a minute 0.0.0.0:8089-
->8080/tcp
-then <container id> could be “237”. Also note that “IPAddress”
-is case-sensitive.)
+5. Let’s see our application running from the containers and the compose. In the top "tab" line of the terminal, click on the *PORTS* tab. Per the docker-compose.yml file, our web app is running on port 8089. Find the row (probably the 2nd) with "8089" in the *Port* column. Under the second column *Forwarded Address*, click on the icon that looks like the splitter pane and, when you hover over it, says **Preview in Editor**. (See screenshot below.)
+   
+![Opening preview of app in editor](./images/lab2s5.png?raw=true "Opening preview app in editor")
 
-Make a note of the url that is returned.
+6. After this, you should get a simple browser that opens up as a pane in the editor.
 
-```
-docker inspect <container id> | grep IPAddress
-```
+![Preview of server in editor](./images/lab2s6.png?raw=true "Preview of server in editor")
 
-6. Open a web browser by clicking on the mouse icon in the upper left and then selecting the Web Browser menu item.
+7. To see our app, we need to add **/roar/** to the end of the URL in that simple browser window. Do that now - you must have the trailing slash!
 
-7. In the browser, go to the url below, substituting in the ip address from the step above for “<ip address>”. (Note the :8080 part added to the ip address)
-http://<ip address>:8080/roar/
+![App in editor](./images/lab2s7.png?raw=true "App in editor")   
 
-8. You should see the running app on a screen like the following:
+8. You should see the running app in the window, though you may need to scroll around  or expand the window to see all of it.
+
+![Full app](./images/lab2s8.png?raw=true "Full app")   
+
 
 **Lab 3 – Debugging Docker Containers**
 
