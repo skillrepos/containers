@@ -104,7 +104,7 @@ docker ps | grep roar
 
 ![Full app](./images/lab2s8.png?raw=true "Full app")   
 
-
+10. Switch back to the Terminal tab for the next lab.
 
 
 **Lab 3 – Debugging Docker Containers**
@@ -151,7 +151,7 @@ docker exec -it <container id> bash
 Note that the last item on the command is the command we want to have
 running when we get inside the container – in this case the bash shell.
 
-7. Now, you’ll be inside the db container. Check where you are with the pwd
+7. Now, you’ll be inside the database container. Check where you are with the pwd
 command and then let’s run the mysql command to connect to the database.
 (Type these at the /# prompt. Note no spaces between the options -u and -p
 and their arguments. You need only type the part in bold.)
@@ -216,6 +216,8 @@ docker rm <container id for roar-db>
 such as nodes and namespaces. We’ll also deploy a version of our app that has
 had Kubernetes yaml files created for it. 
 
+NOTE: If you are working in the second terminal, you will need to **alias k=kubectl** if you want to use the k alias.
+
 1. Before we can deploy our application into Kubernetes, we need to have
 appropriate Kubernetes manifest yaml files for the different types of k8s objects
 we want to create. These can be separate files, or they can be combined. For
@@ -243,7 +245,7 @@ command and the -f option to specify the file. (Note the -n option to specify ou
 new namespace.)
 
 ```
-cd roar-k8s
+cd ../roar-k8s
 
 k -n roar apply -f roar-complete.yaml
 ```
