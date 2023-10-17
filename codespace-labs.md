@@ -550,253 +550,101 @@ k delete ns roar
 </p>
 
 **Lab 7 – Working with Helm**
-**Purpose:  In this lab, we’ll compare a Helm chart against standard Kubernetes manifests and then deploy the Helm chart into Kubernetes**
+**Purpose: In this lab, we’ll start to get familiar with Helm – an orchestration engine for Kubernetes.**
 
-1.	For this lab, reset the default namespace.
+1. Switch to the caz-class subdirectory and use the tree command to look at the structure.
+
+```
+cd ~/caz-class
+tree roar-helm
+```
+![Helm tree structure](./images/cazclass14.png?raw=true "Helm tree structure")
+
+2. Let’s look at how things map from values to templates to instantiated objects.
+Take a look at the template for the roar-web service and then use the template
+command to see how the rendered template (with values filled in) looks.
+
+```
+cat roar-helm/charts/roar-web/templates/service.yaml
+helm template roar-helm/charts/roar-web -s templates/service.yaml
+```
+
+3. Finally, let’s look at the values.yaml file for the roar-web charts.
+
+```
+cat roar-helm/charts/roar-web/values.yaml
+```
+
+4. Next, let’s deploy the full set of charts. First, create the namespace and set the default context to it. (Every other command will be relative to this
+context/namespace).
+
+```
+k create ns roar2
+k config set-context minikube --namespace roar2
+helm install roar2 roar-helm
+```
+
+5. Get a list of the existing helm deployments and then the status of our current one with the commands below.
 
 ```   
-k config set-context --current --namespace=default
+helm list
+helm status roar2
 ```
 
-2.	In the manifests subdir, we have the “regular” Kubernetes manifests for our app, with the database pieces in a sub area under the web app pieces.  Then in the helm  subdir, we have a similar structure with the charts for the two apps.  
-
-To get a better idea of how Helm structures content, do a diff of the two areas. Do one of the tree commands in one terminal and the other in the second terminal.
+6. We want to look at our app running from the helm deployment. Do a port forward as before. This will start the app running in a browswer as before.
 
 ```
-< in left terminal>
-cd /workspaces/k8s-dev-v2
-clear
-tree manifests 
-
-< in right terminal >
-cd /workspaces/k8s-dev-v2
-clear
-tree helm
-
+k port-forward svc/roar-web 8089 &k port-forward svc/roar-web 8089 &
 ```
 
-![tree diff of two folders](./images/k8sdev12.png?raw=true "Tree diff of manifests and helm folders")
+7. You can click on the dialog that pops up to open the app. To see the actual application, add **/roar/** to the end of the URL in the new tab. Don't forget the trailing slash!
 
-3.	Notice the format of the two area is similar, but the helm one is organized as chart structures.
+8. You will probably notice that while you have the web interface up, there is no data in the table. We’ll fix this next.
 
-Let’s take a closer look at the differences between a regular K8s manifest and one for Helm.  We’ll use the deployment one from the web app.  Notice the differences in the two formats, particularly the placeholders in the Helm chart (with the {{ }} pairs instead of the hard-coded values.  **We are not making any changes here.**
+![empty app](./images/cazclass14.png?raw=true "App with no data")
 
-```
-code -d  manifests/roar-web/deployment.yaml helm/roar-web/templates/deployment.yaml
-```
-![diff of regular and helm deployment manifests](./images/k8sdev13.png?raw=true "Diff of regular and helm deployment manifests")
+9. The problem with our Helm deployment is that the name of the service for the database pod is different than what the web pod expects.  You can see where the name gets set in the “roar-db.name” function in the _helpers template. Select the file  [**roar-helm/charts/roar-db/templates/_helpers.tpl**](./roar-helm/charts/roar-db/templates/_helpers.tpl) to open it.
 
-4.	We are not making any changes here, so go ahead and close the diff tab when you’re done looking at the differences.  We've already seen how to deploy the standard Kubernetes manifests and how to look at the app running in the browser. Now let’s install the helm release to see how those are deployed.  
+10. You don’t have to understand all of this, but notice that there are lines in there that mention ** default .Chart.Name .Values.nameOverride **
+We can interpret this line to say that the default value is Chart.Name, but we also can have an override specified via a “nameOverride” field.
 
-5.	Install the helm release.
+11. Let’s add a nameOverride setting to our values file for the database service chart. Open the file [**roar-helm/charts/roar-db/values.yaml**](./roar-helm/charts/roar-db/values.yaml) and then add the line in bold after the initial comments (or anywhere that is not indented). NOTE that there IS A SPACE between "nameOverride:" and "mysql".
 
 ```
-helm install roar-helm helm/roar-web
+# Default values for roar-db-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+```
+**nameOverride: mysql**
+```
+replicaCount: 1
 ```
 
-You should see output like the following:
-```
-NAME: roar-helm
-LAST DEPLOYED: Thu May 18 21:32:04 2023
-NAMESPACE: default
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None	
-```
+12. Since the format of the value was **.Values.nameOverride**, that indicates that it should be set at the top level of the chart. (If it were something like
+.Values.service.nameOverride, that would indicate it should be set in the “service” section of the chart.)
 
-6.	Look at the Helm releases we have running in the cluster now and the resources it added to the default namespace.
+13. Now, that the file has been changed, we’ll do a helm upgrade to get our changes in for the service name. (You’ll need to be in the ~/caz-class
+directory.) Run the upgrade. Then check the overall status of the helm release with the helm status command until it shows that things are ready.
 
 ```
-helm list -A
+helm upgrade --recreate-pods roar2 roar-helm
+helm status roar2
 ```
 
-You should see output like the following: 
-NAME      	NAMESPACE 	REVISION	UPDATED                                	STATUS  	CHART                       	APP VERSION 
-roar-helm 	default   	1       	2023-05-18 21:32:04.31820136 -0400 EDT 	deployed	roar-web-0.1.0
+14. You will probably need to redo the port forward command again since we are recreating the pods.
 
 ```
-k get all
+k port-forward svc/roar-web 8089 &k port-forward svc/roar-web 8089 &
 ```
 
-7.	We really don't want this running in the default namespace. We'd rather have it running in a specific one for the application.  Let's get rid of the resources in K8s tied to this roar-helm release and verify that they're gone.
-
-```
-helm uninstall roar-helm
-
-helm list -A
-
-k get all
-```
-
-8.	Now we can create a new namespace just for the helm version and deploy it into there.  Note the addition of the “-n roar-helm” argument to direct it to that namespace.
-
-```
-k create ns roar-helm
-
-helm install -n roar-helm roar-helm helm/roar-web
-
-helm list -A
-
-k get all -n roar-helm
-```
-
-9.	After a minute or two, the application should be running in the cluster in the roar-helm namespace.  If you want, you can look at the app running on your system.  This service is setup as a type NodePort, so if we weren't running in the codespace, we could look at it on the node at the NodePort value. See if you can find the NodePort value.  It will be after 8089: in the output of the following command and will have a value in the 30000's.
-
-```
-k get svc -n roar-helm
-```
-
-10.	In the right/second terminal, do a port-forward command  to expose the port, like the following:
-
-```
-k port-forward -n roar-helm svc/roar-web :8089 &
-```
-
-11.	 You should see the pop-up as before and you can click on the open butto to get to the tab as you did before.  As before, add "/roar" at the end) and you should be able to see the running application from the *roar-helm* namespace.
-
-<p align="center">
-**[END OF LAB]**
-</p>
-
-**Lab 6:  Templating with Helm**
-**Purpose: In this lab, you’ll get to see how we can change hard-coded values into templates, override values, and upgrade releases through Helm.**
-
-1.	Take a look at the deployment template in the roar-helm directory and notice what the "image" value is set to. Open the file [**helm/roar-web/charts/roar-db/templates/deployment.yaml**](./helm/roar-web/charts/roar-db/templates/deployment.yaml) 
-
-```   
-
-cd helm/roar-web
-
-grep image charts/roar-db/templates/deployment.yaml
-
-``` 
-
-Notice that the value for image is hardcoded to "quay.io/techupskills/roar-db:v2".
-
-2.	We are going to change this to use the Helm templating facility.  This means we'll change this value in the deployment.yaml file to have "placeholders".  And we will put the default values we want to have in the values.yaml file.  You can choose to edit the deployment file or you can use the "code -d" command i to add the differences from a file that already has them.  If using the code -d option, select the left arrow to add the changes from the second file into the deployment.yaml file.  Then save the changes. 
+15. Open the app in the browser tab, add the **/roar/** on the end of the URL and you should see the data showing up in the app.
    
-**Either do:**
+16. You can also see the list of helm releases with the command below.
 
 ```
-code charts/roar-db/templates/deployment.yaml
+helm history roar2
 ```
 
-And change 
-      
-```      
-            image: quay.io/techupskills/roar-db:v2
-```
-
-To
-
-```      
-            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-```
-
-Save your changes and exit the editor.
-
-**Or:**
-
-```
-code -d ../extra/lab6-deployment.yaml charts/roar-db/templates/deployment.yaml
-```
- 
-Then click on the arrow circled in red in the figure.  This will update the template file with the change.  Then close the diff tab.
-
-![merging template into manifest](./images/k8sdev14.png?raw=true "Merging template into manifest")
- 
-3.	Now that we've updated the deployment template, we need to add default values.  We'll use the same approach as in the previous step to add defaults for the image.repository and image.tag values in the chart's values.yaml file. In the file explorer to the left, select the file [**helm/roar-web/charts/roar-db/values.yaml**](./helm/roar-web/charts/roar-db/values.yaml) 
-
-Either do:
-
-```
-code charts/roar-db/values.yaml
-```
-
-And add to the top of the file: 
-
-```      
-  image: 
-    repository: quay.io/techupskills/roar-db
-    tag: v2
-```
-
-Note that the first line should be all the way to the left and the remaining two lines are indented 2 spaces. Save your changes.
-Or:
-
-```
-code -d ../extra/lab6-values.yaml charts/roar-db/values.yaml 
-```
-
-Then click on the arrow circled in red in the figure.  This will update the values file with the change.  Then you can close that diff tab.
-
-![adding values into values.yaml](./images/k8sdev15.png?raw=true "Adding values into values.yaml")
- 
-4.	Update the existing release.
-
-```   
-helm upgrade -n roar-helm roar-helm .
-```
-
-5.	Look at the browser tab with the running application. Refresh the browser. You should see the same webapp and data after the upgrade as before.
-
-6.	Let's suppose we want to overwrite the image used here to be one that is for a test database. The image for the test database is on the quay.io hub at *quay.io/bclaster/roar-db-test:v4* . We could use a long command line string to set it and use the template command to show the proposed changes between the rendered files.  In the roar-web subdirectory, run the commands below to see the difference. (You should be in the */workspaces/k8s-dev/helm/roar-web* directory. Note the “.” In the commands.)
-
-```
-helm template . --debug | grep image
-
-helm template . --debug  --set roar-db.image.repository=quay.io/bclaster/roar-db-test --set roar-db.image.tag=v4  |  grep image
-```
-
-7.	Now, in the other terminal window , start a watch of the pods in your deployed helm release.  This is so that you can see the changes that will happen when we upgrade.  
-
-```
-
-kubectl get pods -n roar-helm --watch
-
-```
-
-8.	Finally, let's do an upgrade using the new values file.  In a separate terminal window from the one where you did step 9, execute the following commands:
-
-```    
-
-cd /workspaces/k8s-dev-v2/helm/roar-web (if not already there)
-
-helm upgrade -n roar-helm roar-helm . --set roar-db.image.repository=quay.io/bclaster/roar-db-test --set roar-db.image.tag=v4 --recreate-pods
-
-```
-
-Ingore the warning. Watch the changes happening to the pods in the terminal window with the watch running.
-
- 
-9.	Go ahead and stop the watch from running in the window via Ctrl-C.
-
-```
-Ctrl-C
-```
-
-10.     Do the port forward again. Then go back to your browser and refresh it.  You should see a version of the (TEST) data in use now. (Depending on how quickly you refresh, you may need to refresh more than once.)
-
-```    
-
- k port-forward -n roar-helm svc/roar-web :8089 &
-
-```
-![test values in database](./images/k8sdev31.png?raw=true "Test values in database")
-
-11.	To save on system resources, delete the *roar-helm* namespace.
-
-```
-k delete ns roar-helm
-```
-
-12. 	In prep for the next lab, install *kustomize* by running the command below.
-
-```
-
-/workspaces/k8s-dev-v2/extra/install-kustomize.sh
-
-```
 
 <p align="center">
 **[END OF LAB]**
