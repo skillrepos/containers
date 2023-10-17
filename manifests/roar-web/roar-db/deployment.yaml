@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    name: mysql
+    app: roar-db 
+  namespace: roar
+spec:
+  selector:
+    matchLabels:
+      app: roar-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: mysql
+        app: roar-db
+    spec:
+      containers:
+      - name: mysql
+        image: quay.io/techupskills/roar-db:v2
+        ports:
+        - name: mysql
+          containerPort: 3306
+        env:
+          - name: MYSQL_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                name: mysql-configmap
+                key: mysql.database
+          - name: MYSQL_PASSWORD
+            valueFrom: 
+              secretKeyRef:
+                name: mysqlsecret
+                key: mysqlpassword
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysqlsecret
+                key: mysqlrootpassword
+          - name: MYSQL_USER
+            valueFrom:
+              configMapKeyRef:
+                name: mysql-configmap
+                key: mysql.user
+        
