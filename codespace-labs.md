@@ -619,6 +619,7 @@ We can interpret this line to say that the default value is Chart.Name, but we a
 ```
 replicaCount: 1
 ```
+![updated file](./images/cazclass17.png?raw=true "updated file")
 
 12. Since the format of the value was **.Values.nameOverride**, that indicates that it should be set at the top level of the chart. (If it were something like
 .Values.service.nameOverride, that would indicate it should be set in the “service” section of the chart.)
