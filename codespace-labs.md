@@ -1,16 +1,23 @@
 # Containers A-Z
 ## An overview of Containers, Docker, Kubernetes, Istio, Helm, Kubernetes Operators and GitOps
 ## Session labs for codespace only
-## Revision 1.1 - 10/15/23
+## Revision 1.2 - 10/17/23
 
 **Startup IF NOT ALREADY DONE!**
 ```
-alias k=kubectl
-minikube start
-minikube addons enable registry
+. ./day1.sh
 ```
 
 **NOTE: To copy and paste in the codespace, you may need to use keyboard commands - CTRL-C and CTRL-V.**
+
+**NOTE: When we start day 2, you will find that your codespace has stopped, as in the following screenshot.**
+
+![Codespace stopped](./images/cazclass16.png?raw=true "Restart codespace")
+
+**You can just restart it by clicking the button and then run the "day 2" script to get things ready to continue.**
+```
+.  ./day2.sh
+```
 
 **Lab 1 - Building Docker Images**
 
@@ -645,6 +652,11 @@ k port-forward svc/roar-web 8089 &k port-forward svc/roar-web 8089 &
 helm history roar2
 ```
 
+17. To save space remove the roar2 namespace.
+
+```
+k delete ns roar2
+```
 
 <p align="center">
 **[END OF LAB]**
@@ -675,10 +687,10 @@ k port-forward -n kubernetes-dashboard svc/kubernetes-dashboard :443 &
 
 ![changing port protocol](./images/k8sdev20.png?raw=true "Changing the Port Protocol")
 
-4.	In the browser, you'll see a login screen.  We'll use the token option to get in. In the *k8s-dev/monitoring* directory is a script to generate the token.  Run the script and then copy the output.
+4.	In the browser, you'll see a login screen.  We'll use the token option to get in.  Run the command below and then copy the output.
 
 ```
-./get-token.sh
+k -n kubernetes-dashboard create token admin-user
 ```
 
 5.	At the login screen, select "Token" as the access method, and paste the token you got from the step above.
