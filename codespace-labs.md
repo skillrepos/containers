@@ -311,8 +311,6 @@ kubectl get -n roar pods -w
 12. Go to the open roar-complete.yaml file (or open it again if needed [**roar-k8s/roar-complete.yaml**](./roar-k8s/roar-complete.yaml).
 
 13. Change lines 19 and 70 to use **.v1** instead of **-v1** in the file.  
-Save your changes and close the editor by clicking on the X in the tab at the 
-top to save and close the file. 
 
 ![Editing the file](./images/cazclass6.png?raw=true "Editing the file")
 ![Editing the file](./images/cazclass7.png?raw=true "Editing the file")
@@ -320,6 +318,7 @@ top to save and close the file.
 14. In the other terminal window, apply the updated manifest.
 
 ```
+k config set-context --current --namespace=roar
 cd ../roar-k8s (if needed)
 k apply -f roar-complete.yaml
 ```
