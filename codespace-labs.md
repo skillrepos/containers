@@ -185,22 +185,16 @@ mysql> select * from agents;
 ```
 mysql> exit
 root@container-id:/# exit
-```
+```  
 
-10. In order to use our registry, we need to run a Kubernetes command to get access. Run the command below. Just dismiss/close any dialogs that come up afterwards.
-
-```
-kubectl port-forward --namespace kube-system service/registry 5000:80 &
-```
-
-11. Let’s go ahead and push our images over to our local registry so they’ll be ready for Kubernetes to use.
+10. Let’s go ahead and push our images over to our local registry so they’ll be ready for Kubernetes to use.
 
 ```
 docker push localhost:5000/roar-web:v1
 docker push localhost:5000/roar-db:v1
 ```
 
-12. Since we no longer need our docker containers running, let’s go ahead and get rid of them with the commands below.
+11. Since we no longer need our docker containers running, let’s go ahead and get rid of them with the commands below.
 (Hint: *docker ps | grep roar* will let you find the ids more easily)
 Stop the containers
 
