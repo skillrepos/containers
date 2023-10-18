@@ -453,7 +453,7 @@ k apply -f roar-complete.yaml
 kubectl port-forward -n roar svc/roar-web 8089 &
 ```
 
-3. In the popup that results about "Your applicaton running on ort 8089 is available", click on **Open in Browser**.
+3. In the popup that results about "Your applicaton running on port 8089 is available", click on **Open in Browser**.
 
 ![Port pop-up](./images/cazclass9.png?raw=true "Port pop-up")
 
