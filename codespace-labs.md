@@ -552,10 +552,10 @@ k delete ns roar
 **Lab 7 – Working with Helm**
 **Purpose: In this lab, we’ll start to get familiar with Helm – an orchestration engine for Kubernetes.**
 
-1. Switch to the caz-class subdirectory and use the tree command to look at the structure.
+1. Switch to the caz-class-v2 subdirectory (if not there) and use the tree command to look at the structure.
 
 ```
-cd ~/caz-class
+cd  /workspaces/caz-class-v2
 tree roar-helm
 ```
 ![Helm tree structure](./images/cazclass14.png?raw=true "Helm tree structure")
