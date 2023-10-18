@@ -605,7 +605,7 @@ k port-forward svc/roar-web 8089 &k port-forward svc/roar-web 8089 &
 
 9. The problem with our Helm deployment is that the name of the service for the database pod is different than what the web pod expects.  You can see where the name gets set in the “roar-db.name” function in the _helpers template. Select the file  [**roar-helm/charts/roar-db/templates/_helpers.tpl**](./roar-helm/charts/roar-db/templates/_helpers.tpl) to open it.
 
-10. You don’t have to understand all of this, but notice that there are lines in there that mention ** default .Chart.Name .Values.nameOverride **
+10. You don’t have to understand all of this, but notice that there are lines in there that mention **default .Chart.Name .Values.nameOverride**
 We can interpret this line to say that the default value is Chart.Name, but we also can have an override specified via a “nameOverride” field.
 
 11. Let’s add a nameOverride setting to our values file for the database service chart. Open the file [**roar-helm/charts/roar-db/values.yaml**](./roar-helm/charts/roar-db/values.yaml) and then add the line in bold after the initial comments (or anywhere that is not indented). NOTE that there IS A SPACE between "nameOverride:" and "mysql".
