@@ -731,6 +731,9 @@ kubectl port-forward -n monitoring svc/monitoring-kube-prometheus-prometheus :90
 kubectl port-forward -n monitoring svc/monitoring-prometheus-node-exporter 9100 &
 
 ```
+Click on the **Metrics** link.
+
+![metrics view](./images/cazclass18.png?raw=true "Metrics view")
 
 13.	 Now let’s change the query to show the rate of apiserver total requests over 1 minute intervals.  Go back to the main Prometheus screen.  In the query entry area, change the text to be what is below and then click on the Execute button to see the results in the graph.
 
