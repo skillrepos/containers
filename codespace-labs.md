@@ -624,7 +624,7 @@ replicaCount: 1
 12. Since the format of the value was **.Values.nameOverride**, that indicates that it should be set at the top level of the chart. (If it were something like
 .Values.service.nameOverride, that would indicate it should be set in the “service” section of the chart.)
 
-13. Now, that the file has been changed, we’ll do a helm upgrade to get our changes in for the service name. (You’ll need to be in the ~/caz-class
+13. Now, that the file has been changed, we’ll do a helm upgrade to get our changes in for the service name. (You’ll need to be in the caz-class-v2
 directory.) Run the upgrade. Then check the overall status of the helm release with the helm status command until it shows that things are ready.
 
 ```
