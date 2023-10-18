@@ -664,7 +664,7 @@ k delete ns roar2
 
 ```
 
-cd /workspaces/k8s-dev-v2/monitoring
+cd /workspaces/caz-class-v2/monitoring
 
 ./setup-monitoring.sh
 
