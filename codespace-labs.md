@@ -14,7 +14,7 @@
 
 ![Codespace stopped](./images/cazclass16.png?raw=true "Restart codespace")
 
-**You can just restart it by clicking the button and then run the "day 2" script to get things ready to continue.**
+**You can just restart it by clicking the button and then run the "day 2" script to get things ready to continue.** (Note you may need to wait a minute for things to start up before running the day 2 script.)
 ```
 .  ./day2.sh
 ```
@@ -92,7 +92,7 @@ docker ps | grep roar
 
 5. Make a note of the first 3 characters of the container id (first column) for the web container (row with roar-web in it). You’ll need those for the next lab.
 
-6. Let’s see our application running from the containers and the compose. In the top "tab" line of the terminal, click on the *PORTS* tab. Per the docker-compose.yml file, our web app is running on port 8089. Find the row (probably the 2nd) with "8089" in the *Port* column. Under the second column *Forwarded Address*, click on the icon that looks like the splitter pane and, when you hover over it, says **Preview in Editor**. (See screenshot below.)
+6. Let’s see our application running from the containers and the compose. In the top "tab" line of the terminal, click on the *PORTS* tab. Per the docker-compose.yml file, our web app is running on port 8089. Find the row (probably the 3rd) with "8089" in the *Port* column. Under the second column *Forwarded Address*, click on the icon that looks like the splitter pane and, when you hover over it, says **Preview in Editor**. (See screenshot below.)
    
 ![Opening preview of app in editor](./images/lab2s5.png?raw=true "Opening preview app in editor")
 
