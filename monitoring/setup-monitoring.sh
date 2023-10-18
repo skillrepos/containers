@@ -11,4 +11,4 @@ echo ...Installing Kubernetes dashboard
 echo
 # install dashboard
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
-kubectl apply -f /workspaces/k8s-dev-v2/monitoring/dashboard-rbac.yaml
+kubectl apply -f /workspaces/caz-class-v2/monitoring/dashboard-rbac.yaml
