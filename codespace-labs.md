@@ -660,6 +660,13 @@ k delete ns roar2
 
 **Purpose:  This lab will introduce you to a few of the ways we can monitor what is happening in our Kubernetes cluster and objects.**
 
+**NOTE: If you run into any issues where the system seems to be hanging and not responding, it may be due to a high cpu load from previous labs. You should be able to fix this via the commands below.**
+
+```
+minikube stop
+minikube start
+```
+
 1.	In order to have the pieces setup for this lab, change to the *monitoring* directory, and run the script *setup-monitoring.sh*. This will take a bit to complete.
 
 ```
@@ -681,7 +688,7 @@ k port-forward -n kubernetes-dashboard svc/kubernetes-dashboard :443 &
 
 ![changing port protocol](./images/k8sdev20.png?raw=true "Changing the Port Protocol")
 
-4.	In the browser, you'll see a login screen.  We'll use the token option to get in.  Run the command below and then copy the output.
+4.	In the browser, you'll see a login screen.  We'll use the token option to get in.  Switch back to the TERMINAL tab and run the command below and then copy the output.
 
 ```
 k -n kubernetes-dashboard create token admin-user
