@@ -34,6 +34,7 @@ These steps **must** be completed prior to starting the actual labs.
 
     - The output should look similar to the following.
 
+```console
 😄  minikube v1.31.2 on Ubuntu 20.04 (docker/amd64)
 ✨  Automatically selected the docker driver. Other choices: none, ssh
 📌  Using Docker driver with root privileges
@@ -52,7 +53,7 @@ These steps **must** be completed prior to starting the actual labs.
 🔎  Verifying Kubernetes components...
 🌟  Enabled addons: default-storageclass, storage-provisioner
 🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
-
+```
 
   ```console
    💡  registry is an addon maintained by Google. For any concerns contact minikube on GitHub.
