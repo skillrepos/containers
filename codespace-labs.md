@@ -521,7 +521,7 @@ code -d roar-complete.yaml.pv roar-complete.yaml
 k apply -f roar-complete.yaml
 ```
 
-14.	 Add the extra record again into the database.
+14.	 Add the extra record again into the database. (Note you may have to try this a couple of times as it will take a bit for the pod to start up again.)
 
 ```
 ./update-db.sh <namespace>
