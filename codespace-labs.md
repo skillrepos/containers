@@ -601,7 +601,7 @@ k port-forward svc/roar-web 8089 &k port-forward svc/roar-web 8089 &
 
 8. You will probably notice that while you have the web interface up, there is no data in the table. We’ll fix this next.
 
-![empty app](./images/cazclass14.png?raw=true "App with no data")
+![empty app](./images/cazclass15.png?raw=true "App with no data")
 
 9. The problem with our Helm deployment is that the name of the service for the database pod is different than what the web pod expects.  You can see where the name gets set in the “roar-db.name” function in the _helpers template. Select the file  [**roar-helm/charts/roar-db/templates/_helpers.tpl**](./roar-helm/charts/roar-db/templates/_helpers.tpl) to open it.
 
