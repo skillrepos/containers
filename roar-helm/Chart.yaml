@@ -1,4 +1,0 @@
-apiVersion: v2
-description: Helm Chart for roar demo application
-name: roar-helm
-version: 0.1.0

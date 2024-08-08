@@ -1,6 +1,0 @@
-apiVersion: v2
-description: Helm chart for roar-web instance
-name: roar-web
-version: 0.1.0
-
-
