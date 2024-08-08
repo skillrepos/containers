@@ -1,35 +1,38 @@
-# Containers A-Z - lab setup
+# Containers Fundamentals - Lab Setup
 
 These instructions will guide you through configuring a GitHub Codespaces environment that you can use to run the course labs.
 
 These steps **must** be completed prior to starting the actual labs.
 
-## Create your own repository for these labs
+(If you prefer to run this in your own environment, you will need to have Docker and Kubernetes installed and configured, and have a clone of this repository. If you run in your own environment, some elements in the labs may look/be different and are not guaranteed to function the same way. For those reasons, the codespace environment is the recommended one for the class.)
 
-- Ensure that you have created a repository by forking the [skillrepos/caz-class-v2](https://github.com/skillrepos/cas-class-v2) project as a template into your own GitHub area.
-- You do this by clicking the `Fork` button in the upper right portion of the main project page and following the steps to create a copy in **your-github-userid/caz-class-v2** .
+If using the codespace environment, follow the instructions below.
 
-![Forking repository](./images/cazclass1.png?raw=true "Forking the repository")
-![Forking repository](./images/cazclass3.png?raw=true "Forking the repository")
+**1. Click on the button below to start a new codespace from this repository.**
 
-## Configure your codespace
+Click here ➡️  [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/skillrepos/containers?quickstart=1)
 
-1. In your forked repository, start a new codespace.
+**2. Then click on the option to create a new codespace.**
 
-    - Click the `Code` button on your repository's landing page.
-    - Click the `Codespaces` tab.
-    - Click `Create codespaces on main` to create the codespace.
-    - After the codespace has initialized there will be a terminal present.
+![Creating new codespace from button](./images/cf01.png?raw=true "Creating new codespace from button")
 
-![Starting codespace](./images/cazclass2.png?raw=true "Starting your codespace")
+This will run for a while to get everything ready.
+
+NOTE: At the end, after the codespace is actually started, it will still be running some post-startup scripts that will take a few more minutes to complete as shown below:
+
+![Running post-install scripts](./images/dga66.png?raw=true "Running post-install scripts")
+
+The codespace is ready to use when you see a prompt like the one shown below in its terminal.
+
+![Ready to use](./images/dga67.png?raw=true "Ready to use")
 
 
 ## Start the Kubernetes cluster and complete setup
 
-2. Run the following commands in the codespace's terminal (**This will take several minutes to run...**):
+**3. Run the following commands in the codespace's terminal (This will take several minutes to run...):**
 
       ```
-      . ./day1.sh
+      . ./setup.sh
       ```
 
     - The output should look similar to the following.
@@ -64,15 +67,29 @@ These steps **must** be completed prior to starting the actual labs.
    🌟  The 'registry' addon is enabled
   ```
 
-
 ## Labs
 
-3. After the codespace has started, open the labs document by going to the file tree on the left, find the file named **codespace-labs.md**, right-click on it, and open it with the **Preview** option.)
+**4. After the codespace has started, open the labs document by going to the file tree on the left, find the file named *codespace-labs.md*, right-click on it, and open it with the *Preview* option.)**
 
-![Labs doc preview in codespace](./images/cazclass4.png?raw=true "Labs doc preview in codespace")
+![Labs doc preview in codespace](./images/cf04.png?raw=true "Labs doc preview in codespace")
 
 This will open it up in a tab above your terminal. Then you can follow along with the steps in the labs. 
 Any command in the gray boxes is either code intended to be run in the console or code to be updated in a file.
 
-Labs doc: [Containers A-Z Labs](codespace-labs.md)
+Labs doc: [Containers Fundamentals Labs](codespace-labs.md)
 
+**5. (Optional, but recommended) Change your codespace's default timeout from 30 minutes to longer (45 minimum).**
+To do this, when logged in to GitHub, go to https://github.com/settings/codespaces and scroll down on that page until you see the *Default idle timeout* section. Adjust the value as desired.
+
+![Changing codespace idle timeout value](./images/dga56.png?raw=true "Changing codespace idle timeout value")
+
+**NOTE: If your codespace times out and you need to reopen it**
+
+1. Go to https://github.com/<your github userid>/codespaces
+2. Find the codespace in the list, right-click, and select *Open in browser*
+3. After the codespace opens up, run the script *./setup.sh* in the terminal. (You might need to run this more than once if restarting a codespace depending on timing.)
+```
+./setup.sh
+```
+
+<br/><br/>
