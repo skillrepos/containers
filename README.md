@@ -4,7 +4,7 @@ These instructions will guide you through configuring a GitHub Codespaces enviro
 
 These steps **must** be completed prior to starting the actual labs.
 
-(If you prefer to run this in your own environment, you will need to have Docker and Kubernetes installed and configured, and have a clone of this repository. If you run in your own environment, some elements in the labs may look/be different and are not guaranteed to function the same way. For those reasons, the codespace environment is the recommended one for the class.)
+*(Note: If you prefer to run this in your own environment, you will need to have Docker and Kubernetes installed and configured, and have a clone of this repository. If you run in your own environment, some elements in the labs may look/be different and are not guaranteed to function the same way. For those reasons, the codespace environment is the recommended one for the class.)*
 
 If using the codespace environment, follow the instructions below.
 
