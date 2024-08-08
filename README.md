@@ -1,6 +1,6 @@
 # Containers Fundamentals - Lab Setup
 
-These instructions will guide you through configuring a GitHub Codespaces environment that you can use to run the course labs. (Doing this in Chrome if you have it may work better for copy and paste actions.)
+These instructions will guide you through configuring a GitHub Codespaces environment that you can use to run the course labs. (*Doing this in Chrome if you have it may work better for copy and paste actions.*)
 
 These steps **must** be completed prior to starting the actual labs.
 
