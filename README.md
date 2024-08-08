@@ -18,54 +18,42 @@ Click here ➡️  [![Open in GitHub Codespaces](https://github.com/codespaces/b
 
 This will run for a while to get everything ready.
 
-NOTE: At the end, after the codespace is actually started, it will still be running some post-startup scripts that will take a few more minutes to complete as shown below:
-
-![Running post-install scripts](./images/dga66.png?raw=true "Running post-install scripts")
-
-The codespace is ready to use when you see a prompt like the one shown below in its terminal.
-
-![Ready to use](./images/dga67.png?raw=true "Ready to use")
-
-
 ## Start the Kubernetes cluster and complete setup
 
 **3. Run the following commands in the codespace's terminal (This will take several minutes to run...):**
 
       ```
-      . ./setup.sh
+      ./setup.sh
       ```
 
     - The output should look similar to the following.
 
 ```console
-😄  minikube v1.31.2 on Ubuntu 20.04 (docker/amd64)
-✨  Automatically selected the docker driver. Other choices: none, ssh
+😄  minikube v1.33.1 on Ubuntu 20.04 (docker/amd64)
+✨  Automatically selected the docker driver. Other choices: ssh, none
 📌  Using Docker driver with root privileges
-👍  Starting control plane node minikube in cluster minikube
-🚜  Pulling base image ...
-💾  Downloading Kubernetes v1.27.4 preload ...
-    > preloaded-images-k8s-v18-v1...:  393.21 MiB / 393.21 MiB  100.00% 206.91 
-    > gcr.io/k8s-minikube/kicbase...:  447.62 MiB / 447.62 MiB  100.00% 56.57 M
+👍  Starting "minikube" primary control-plane node in "minikube" cluster
+🚜  Pulling base image v0.0.44 ...
+💾  Downloading Kubernetes v1.30.0 preload ...
+    > preloaded-images-k8s-v18-v1...:  342.90 MiB / 342.90 MiB  100.00% 207.93 
+    > gcr.io/k8s-minikube/kicbase...:  481.58 MiB / 481.58 MiB  100.00% 66.28 M
 🔥  Creating docker container (CPUs=2, Memory=2200MB) ...
-🐳  Preparing Kubernetes v1.27.4 on Docker 24.0.4 ...
+🐳  Preparing Kubernetes v1.30.0 on Docker 26.1.1 ...
     ▪ Generating certificates and keys ...
     ▪ Booting up control plane ...
     ▪ Configuring RBAC rules ...
 🔗  Configuring bridge CNI (Container Networking Interface) ...
-    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
 🔎  Verifying Kubernetes components...
-🌟  Enabled addons: default-storageclass, storage-provisioner
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
 🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+💡  registry is an addon maintained by minikube. For any concerns contact minikube on GitHub.
+You can view the list of minikube maintainers at: https://github.com/kubernetes/minikube/blob/master/OWNERS
+    ▪ Using image gcr.io/k8s-minikube/kube-registry-proxy:0.0.6
+    ▪ Using image docker.io/registry:2.8.3
+🔎  Verifying registry addon...
+🌟  The 'registry' addon is enabled
 ```
-
-  ```console
-   💡  registry is an addon maintained by Google. For any concerns contact minikube on GitHub.
-   You can view the list of minikube maintainers at: https://github.com/kubernetes/minikube/blob/master/OWNERS
-    ▪ Using image gcr.io/google_containers/kube-registry-proxy:0.4
-    ▪ Using image docker.io/registry:2.8.1
-   🔎  Verifying registry addon...
-   🌟  The 'registry' addon is enabled
-  ```
 
 ## Labs
 
