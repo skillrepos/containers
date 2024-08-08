@@ -5,10 +5,10 @@
 
 **Startup IF NOT ALREADY DONE!**
 ```
-. ./setup.sh
+./setup.sh
 ```
 
-**NOTE: To copy and paste in the codespace, you may need to use keyboard commands - CTRL-C and CTRL-V.**
+**NOTE: To copy and paste in the codespace, Chrome is recommended. You may need to use keyboard commands - CTRL-C and CTRL-V.**
 
 **Lab 1 - Building Docker Images**
 
@@ -109,7 +109,7 @@ docker ps | grep roar
 
 **Purpose: While our app runs fine here, it’s helpful to know about a few commands that we can use to learn more about our containers if there are problems.**
 
-1. Let’s get a description of all of the attributes of our containers. For these commands, use the same 3 character container id you used in lab 2.
+1. Let’s get a description of all of the attributes of our containers. For these commands, use the same 3 character container id from the web container that you recorded from Lab 2, step 5.
 Run the inspect command. Take a moment to scroll around the output.
 
 ```
