@@ -1,0 +1,9 @@
+{
+  "name": "Codespace to perform Kubernetes Deep Dive for Developers Labs",
+  "hostRequirements": {
+    "cpus": 4,
+    "memory": "8gb",
+    "storage": "32gb"
+  },
+  "postCreateCommand": "echo alias k=kubectl >> ~/.bash_aliases && bash -i scripts/pysetup.sh py_env"
+}
