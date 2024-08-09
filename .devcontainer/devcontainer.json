@@ -5,5 +5,5 @@
     "memory": "8gb",
     "storage": "32gb"
   },
-  "postCreateCommand": "echo alias k=kubectl >> ~/.bash_aliases && bash -i scripts/pysetup.sh py_env"
+  "postCreateCommand": "echo alias k=kubectl >> ~/.bash_aliases"
 }
