@@ -75,9 +75,9 @@ To do this, when logged in to GitHub, go to https://github.com/settings/codespac
 
 1. Go to https://github.com/<your github userid>/codespaces
 2. Find the codespace in the list, right-click, and select *Open in browser*
-3. After the codespace opens up, run the script *./setup.sh* in the terminal. (You might need to run this more than once if restarting a codespace depending on timing.)
+3. After the codespace opens up, run the script *minikube start* in the terminal. (You might need to run this more than once if restarting a codespace depending on timing.)
 ```
-./setup.sh
+minikube start
 ```
 
 <br/><br/>
