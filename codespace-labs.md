@@ -1,7 +1,7 @@
 # Containers Fundamentals
 ## An overview of Containers, Docker, and Kubernetes
 ## Session labs for codespace only
-## Revision 1.0 - 08/08/24
+## Revision 1.1 - 08/09/24
 
 **Startup IF NOT ALREADY DONE!**
 ```
@@ -208,8 +208,6 @@ docker rm <container id for roar-db>
 such as nodes and namespaces. We’ll also deploy a version of our app that has
 had Kubernetes yaml files created for it. 
 
-NOTE: If you are working in the second terminal, you will need to **alias k=kubectl** if you want to use the k alias.
-
 1. Before we can deploy our application into Kubernetes, we need to have
 appropriate Kubernetes manifest yaml files for the different types of k8s objects
 we want to create. These can be separate files, or they can be combined. For
@@ -256,8 +254,7 @@ k get pods -n roar --show-labels
 
 Notice the STATUS field. What does the “ImagePullBackOff ” or “ErrImagePull” status mean?
 
-5.  We need to investigate why this is happening. Let's set the default namespace to be 'roar' instead of 'default' so we
-don't have to pass *-n roar* all of the time.
+5.  We need to investigate why this is happening. Let's set the default namespace to be 'roar' instead of 'default' so we don't have to pass *-n roar* all of the time.
 
 ```
 k config set-context --current --namespace=roar
@@ -293,10 +290,10 @@ k get events | grep web | grep image
 setup a watch in a separate terminal so we can see how Kubernetes changes
 things when we make a change to the configuration. 
 
-11.  In the right terminal, run a command to start a `watch` of pods in the roar namespace. The watch will continue running until we stop it.  ( Note you will need to add *alias k=kubectl* if you want it there. )
+11.  In the right terminal, run a command to start a `watch` of pods in the roar namespace. The watch will continue running until we stop it.  
 
 ```
-kubectl get -n roar pods -w
+k get -n roar pods -w
 ```
 
 12. Go to the open roar-complete.yaml file (or open it again if needed [**roar-k8s/roar-complete.yaml**](./roar-k8s/roar-complete.yaml).
@@ -657,5 +654,5 @@ k port-forward -n monitoring svc/monitoring-grafana :80  &
 </p>
 
 <p align="center">
-(c) 2023 Brent Laster and Tech Skills Transformations
+(c) 2024 Brent Laster and Tech Skills Transformations
 </p>
