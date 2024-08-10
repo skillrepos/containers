@@ -639,7 +639,7 @@ k port-forward -n monitoring svc/monitoring-grafana :80  &
 
 ```
 
-16.	Go to the browser tab. Login with username *admin* and the initial password.
+16.	Go to the browser tab. Login with username *admin* and the initial password (*prom-operator*).
 
 ![grafana login](./images/k8sdev28.png?raw=true "Grafana login")
 
